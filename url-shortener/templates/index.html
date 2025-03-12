@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+</head>
+<body>
+    <h2>Simple URL Shortener</h2>
+    <input type="text" id="longUrl" placeholder="Enter long URL">
+    <button onclick="shortenUrl()">Shorten</button>
+    <p id="shortenedUrl"></p>
+
+    <script>
+        async function shortenUrl() {
+            const longUrl = document.getElementById("longUrl").value;
+            const response = await fetch("/shorten", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ url: longUrl })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById("shortenedUrl").innerHTML = 
+                    `<a href="${data.shortened_url}" target="_blank">${data.shortened_url}</a>`;
+            } else {
+                document.getElementById("shortenedUrl").innerText = "Error shortening URL!";
+            }
+        }
+    </script>
+</body>
+</html>
